@@ -24,16 +24,18 @@ public class DiceGame {
 				table.printTable();
 				System.out.println("TURN " + turnNr + "\n" + player.toString());
 				Score currentTurnScore = takeTurn(player);
-				System.out.println("Points awarded: " + currentTurnScore.getPoints());
+				System.out.println("Points awarded: "
+						+ currentTurnScore.getPoints());
 				table.updateTable(player, currentTurnScore);
 			}
 		}
-		
+
 		System.out.println("------- FINAL RESULTS -------");
 		table.printTable();
 		List<Player> winner = table.getWinner();
 		if (winner.size() == 1)
-			System.out.println("The winner is: "+table.getWinner().get(0)+". Congratulations!");
+			System.out.println("The winner is: " + table.getWinner().get(0)
+					+ ". Congratulations!");
 		else
 			System.out.println("There's a tie! Congratulations!");
 		scanner.close();
@@ -63,7 +65,7 @@ public class DiceGame {
 	private ScoreCategory getScoreCategory() {
 		System.out.println("Categories: 1 2 3 4 5 6 3ki 4ki f ms ds g sz");
 		System.out.print("Your choice:  ");
-		ScoreCategory sc = null; 
+		ScoreCategory sc = null;
 		boolean done = false;
 		while (!done) {
 			try {
@@ -94,7 +96,11 @@ public class DiceGame {
 				roll.freeze(c);
 				roll.roll();
 				done = true;
-			} catch (GameLogicException | NumberFormatException e) {
+			} catch (GameLogicException e) {
+				System.out
+						.print("Invalid dice given! Choose again, and check your choice twice before accepting: ");
+				done = false;
+			} catch (NumberFormatException e) {
 				System.out
 						.print("Invalid dice given! Choose again, and check your choice twice before accepting: ");
 				done = false;
