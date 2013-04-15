@@ -19,7 +19,7 @@ public class DiceGame {
 	public void play() {
 		System.out.println("Playing Dice");
 
-		for (int turnNr = 1; turnNr <= 4; turnNr++) {
+		for (int turnNr = 1; turnNr <= 13; turnNr++) {
 			for (Player player : players) {
 				table.printTable();
 				System.out.println("TURN " + turnNr + "\n" + player.toString());
