@@ -5,7 +5,7 @@ import java.util.Map;
 
 public enum ScoreCategory {
 	ONES, TWOS, THREES,	FOURS, FIVES, SIXES, THREE_OF_A_KIND, FOUR_OF_A_KIND, FULL_HOUSE, 
-	LOW_STRAIGHT, HIGH_STRAIGHT, GENERAL, CHANCE;
+	LOW_STRAIGHT, HIGH_STRAIGHT, GENERAL, CHANCE, EVEN, ODD;
 	
 	private final static Map<String, ScoreCategory> TYPE = new HashMap<String, ScoreCategory>();
 	
@@ -23,6 +23,8 @@ public enum ScoreCategory {
 				TYPE.put("ds", HIGH_STRAIGHT);
 				TYPE.put("g", GENERAL);
 				TYPE.put("sz", CHANCE);
+				TYPE.put("parz", EVEN);
+				TYPE.put("nieparz", ODD);
 			}
 	
 	public static ScoreCategory getResult(String resultType) throws GameLogicException {
@@ -65,6 +67,10 @@ public enum ScoreCategory {
 			case GENERAL:
 				if (diceRoll.hasEqualUnique(5))
 					return 50;
+			case EVEN:
+				return diceRoll.count(2)*2 + diceRoll.count(4)*4 + diceRoll.count(6)*6;
+			case ODD:
+				return diceRoll.count(1)*1 + diceRoll.count(3)*3 + diceRoll.count(5)*5;
 			default:
 				break;
 		}
