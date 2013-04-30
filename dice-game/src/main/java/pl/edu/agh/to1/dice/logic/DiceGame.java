@@ -1,25 +1,26 @@
 package pl.edu.agh.to1.dice.logic;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 public class DiceGame {
 
-	public static final int DICE_COUNT = 5;
-	private final ScoreTable table;
-	private final Scanner scanner = new Scanner(System.in);
+	// TODO
+	//			moze w konstruktorze
+	private final int DICE_COUNT = 5;
+	private final int REROLL_TIMES = 2;
+	private final int SCORES_PER_CATEGORY = 1;
+	private final int TURN_NR = ScoreCategory.values().length * SCORES_PER_CATEGORY;
+	
 	private final List<Player> players;
-
+	private final ScoreTable table;
+	
 	public DiceGame(List<Player> players) {
-		table = new ScoreTable(players);
+		table = new ScoreTable(players, SCORES_PER_CATEGORY);
 		this.players = players;
 	}
 
 	public void play() {
-		System.out.println("Playing Dice");
-
-		for (int turnNr = 1; turnNr <= 13; turnNr++) {
+		for (int turnNr = 1; turnNr <= TURN_NR; turnNr++) {
 			for (Player player : players) {
 				table.printTable();
 				System.out.println("TURN " + turnNr + "\n" + player.toString());
@@ -38,75 +39,24 @@ public class DiceGame {
 					+ ". Congratulations!");
 		else
 			System.out.println("There's a tie! Congratulations!");
-		scanner.close();
 	}
 
 	private Score takeTurn(Player player) {
 
-		DiceRoll roll = new DiceRoll(DICE_COUNT);
-
-		System.out.println("Your dice roll:  " + roll.toString());
-		rerollDice(roll);
-		System.out.println("Your dice roll:  " + roll.toString());
-		rerollDice(roll);
-		System.out.println("Your dice roll:  " + roll.toString());
-
-		ScoreCategory category = getScoreCategory();
+		DiceRoll roll = player.rollDice(DICE_COUNT);
+		roll = player.rerollDice(roll, REROLL_TIMES);
+	
+		ScoreCategory category = player.chooseScoreCategory();
 		Score score = new Score(roll, category);
-
+		
 		while (!table.isLegal(player, score)) {
-			System.out.print("Category already used! Try again:  ");
-			category = getScoreCategory();
+			category = player.chooseScoreCategoryAgain();
 			score = new Score(roll, category);
 		}
+
 		return score;
 	}
 
-	private ScoreCategory getScoreCategory() {
-		System.out.println("Categories: 1 2 3 4 5 6 3ki 4ki f ms ds g sz");
-		System.out.print("Your choice:  ");
-		ScoreCategory sc = null;
-		boolean done = false;
-		while (!done) {
-			try {
-				String choice = scanner.nextLine().toLowerCase().trim();
-				sc = ScoreCategory.getResult(choice);
-				done = true;
-			} catch (GameLogicException e) {
-				System.out.println("Unknown option, try again: ");
-				done = false;
-			}
-		}
-		return sc;
-	}
 
-	private boolean rerollDice(DiceRoll roll) {
-		boolean done = false;
-		System.out.print("Choose dice you want to freeze: ");
-		while (!done) {
-			try {
-				String choice = scanner.nextLine().toLowerCase().trim();
-				if (choice.equals("")) {
-					return false;
-				}
-				List<Integer> c = new ArrayList<Integer>();
-				for (String s : choice.split(",| ")) {
-					c.add(Integer.parseInt(s.trim()));
-				}
-				roll.freeze(c);
-				roll.roll();
-				done = true;
-			} catch (GameLogicException e) {
-				System.out
-						.print("Invalid dice given! Choose again, and check your choice twice before accepting: ");
-				done = false;
-			} catch (NumberFormatException e) {
-				System.out
-						.print("Invalid dice given! Choose again, and check your choice twice before accepting: ");
-				done = false;
-			}
-		}
-		return true;
-	}
 
 }

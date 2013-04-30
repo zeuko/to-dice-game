@@ -7,15 +7,17 @@ import java.util.Map;
 
 public class ScoreTable {
 		
-	private final Map<Player, Map<ScoreCategory, Score>> scoreTable = new HashMap<Player, Map<ScoreCategory, Score>>();
+	private final int scores_in_category;
+	private final Map<Player, Map<ScoreCategory, List<Score>>> scoreTable = new HashMap<Player, Map<ScoreCategory, List<Score>>>();
 	private final Map<Player, Integer> sumTableUp = new HashMap<Player, Integer>();
 	private final Map<Player, Integer> sumTableDown = new HashMap<Player, Integer>();
 	
-	public ScoreTable(List<Player> players) {
+	public ScoreTable(List<Player> players, int scoreInCategory) {
+		scores_in_category = scoreInCategory;
 		for (Player player : players) {
-			scoreTable.put(player, new HashMap<ScoreCategory, Score>());
+			scoreTable.put(player, new HashMap<ScoreCategory, List<Score>>());
 			for(ScoreCategory c : ScoreCategory.values()) {
-				scoreTable.get(player).put(c, null);
+				scoreTable.get(player).put(c, new ArrayList<Score>());
 			}
 			sumTableDown.put(player, 0);
 			sumTableUp.put(player, 0);
@@ -30,7 +32,7 @@ public class ScoreTable {
 	 * @return 
 	 */
 	public boolean isLegal(Player player, Score points) {
-		return scoreTable.get(player).get(points.getCategory()) == null;
+		return scoreTable.get(player).get(points.getCategory()).size() < scores_in_category;
 	}
 	
 	/**
@@ -40,7 +42,7 @@ public class ScoreTable {
 	 * @param score
 	 */
 	public void updateTable(Player player, Score score) {
-		scoreTable.get(player).put(score.getCategory(), score);	
+		scoreTable.get(player).get(score.getCategory()).add(score);	
 		if (score.getCategory().ordinal() <= ScoreCategory.SIXES.ordinal()) {
 			sumTableDown.put(player, sumTableDown.get(player) + score.getPoints());
 		} else {
@@ -50,19 +52,21 @@ public class ScoreTable {
 	
 	public void printTable() {
 		String line = "\n---------------";
-		for(int i = 0; i <= scoreTable.size(); i++) {
-			line += "----------";
-		}
+		for(int i = 0; i <= scoreTable.size(); i++) { line += "----------";	}
+		for(int i = 0; i <= scores_in_category; i++) { line += "----";	}
+		
 		System.out.println(line);
 		System.out.format("%15s", "category".toUpperCase());
 		for (Player p : scoreTable.keySet()) {
-			System.out.format("%10s", p.getName());
+			System.out.format("%"+(4+scores_in_category*4)+"s", p.getName());
 		}
+		
 		System.out.println(line);
+		
 		for (ScoreCategory c : ScoreCategory.values()) {
 			System.out.format("%15s", c.toString().toLowerCase().replaceAll("_", " "));
 			for (Player p : scoreTable.keySet()) {
-				System.out.format("%10d",scoreTable.get(p).get(c) == null ? 0 : scoreTable.get(p).get(c).getPoints());
+				System.out.format("%"+scores_in_category*4+"s", getPointsOnly(p, c));
 			}
 			
 			if (c == ScoreCategory.SIXES) {
@@ -99,6 +103,14 @@ public class ScoreTable {
 		
 		System.out.println(line);
 		System.out.println();
+	}
+
+	private String getPointsOnly(Player p, ScoreCategory c) {
+		List<Score> pointsList = scoreTable.get(p).get(c);
+		StringBuilder pointsBuilder = new StringBuilder("");
+		for (Score s : pointsList)
+			pointsBuilder.append(s.getPoints()).append(" ");
+		return pointsBuilder.toString().trim();
 	}
 
 	public List<Player> getWinner() {
