@@ -5,15 +5,24 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+// TODO:	wyswietlanie wynikow
+// TODO:	sumowanie punktow z wielu kategorii
 public class ScoreTable {
 		
-	private final int scores_in_category;
+	private final int scoresInCategory;
+	// mapa mapujaca mape na liste :P
 	private final Map<Player, Map<ScoreCategory, List<Score>>> scoreTable = new HashMap<Player, Map<ScoreCategory, List<Score>>>();
 	private final Map<Player, Integer> sumTableUp = new HashMap<Player, Integer>();
 	private final Map<Player, Integer> sumTableDown = new HashMap<Player, Integer>();
 	
+	/**
+	 * Creates new ScoreTable. Must be given list of players and number of scores allowed in single category.
+	 * 
+	 * @param players list of players
+	 * @param scoreInCategory number of scores allowed in each category
+	 */
 	public ScoreTable(List<Player> players, int scoreInCategory) {
-		scores_in_category = scoreInCategory;
+		scoresInCategory = scoreInCategory;
 		for (Player player : players) {
 			scoreTable.put(player, new HashMap<ScoreCategory, List<Score>>());
 			for(ScoreCategory c : ScoreCategory.values()) {
@@ -32,7 +41,7 @@ public class ScoreTable {
 	 * @return 
 	 */
 	public boolean isLegal(Player player, Score points) {
-		return scoreTable.get(player).get(points.getCategory()).size() < scores_in_category;
+		return scoreTable.get(player).get(points.getCategory()).size() < scoresInCategory;
 	}
 	
 	/**
@@ -50,15 +59,19 @@ public class ScoreTable {
 		}
 	}
 	
+	/*
+	 * Mess, mess, mess.
+	 * 
+	 */
 	public void printTable() {
 		String line = "\n---------------";
 		for(int i = 0; i <= scoreTable.size(); i++) { line += "----------";	}
-		for(int i = 0; i <= scores_in_category; i++) { line += "----";	}
+		for(int i = 0; i <= scoresInCategory; i++) { line += "----";	}
 		
 		System.out.println(line);
 		System.out.format("%15s", "category".toUpperCase());
 		for (Player p : scoreTable.keySet()) {
-			System.out.format("%"+(4+scores_in_category*4)+"s", p.getName());
+			System.out.format("%"+(4+scoresInCategory*4)+"s", p.getName());
 		}
 		
 		System.out.println(line);
@@ -66,7 +79,7 @@ public class ScoreTable {
 		for (ScoreCategory c : ScoreCategory.values()) {
 			System.out.format("%15s", c.toString().toLowerCase().replaceAll("_", " "));
 			for (Player p : scoreTable.keySet()) {
-				System.out.format("%"+scores_in_category*4+"s", getPointsOnly(p, c));
+				System.out.format("%"+scoresInCategory*4+"s", getPointsOnly(p, c));
 			}
 			
 			if (c == ScoreCategory.SIXES) {
@@ -105,6 +118,14 @@ public class ScoreTable {
 		System.out.println();
 	}
 
+	/**
+	 * Gets string containing specified player's points in given category,
+	 * formatted in appropriate way (ex. "12  0  3", when there are three scores in single category  allowed)
+	 * 
+	 * @param p
+	 * @param c
+	 * @return
+	 */
 	private String getPointsOnly(Player p, ScoreCategory c) {
 		List<Score> pointsList = scoreTable.get(p).get(c);
 		StringBuilder pointsBuilder = new StringBuilder("");
@@ -113,6 +134,10 @@ public class ScoreTable {
 		return pointsBuilder.toString().trim();
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public List<Player> getWinner() {
 		List<Player> winner = new ArrayList<Player>();
 		int currMaxPoints = 0;

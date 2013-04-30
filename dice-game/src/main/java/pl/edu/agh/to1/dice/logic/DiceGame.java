@@ -2,10 +2,12 @@ package pl.edu.agh.to1.dice.logic;
 
 import java.util.List;
 
+
+// TODO:	pozbyc sie System.out.println() ;]
+
 public class DiceGame {
 
-	// TODO
-	//			moze w konstruktorze
+	// TODO  moze w konstruktorze? 
 	private final int DICE_COUNT = 5;
 	private final int REROLL_TIMES = 2;
 	private final int SCORES_PER_CATEGORY = 1;

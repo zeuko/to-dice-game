@@ -14,8 +14,11 @@ public class App {
     	
     	
     	// TODO - kod ponizej wrzucic w GameStarter:
-    	//			GameStarter (korzystajac z jakiegos IO handlera) zapyta o ilosc graczy, imiona, typ rozgrywki
-    	//			stworzy graczy, stworzy gre i zwroci ja tutaj
+    	//			GameStarter (korzystajac z jakiegos IO handlera, jezeli chcemy miec kontakt ze swiatem zewnetrznym w jednym miejscu) 
+    	//			zapyta o ilosc graczy, imiona, typ rozgrywki
+    	//			stworzy graczy, tablice wynikow, stworzy gre i zwroci ja tutaj.
+    	//			mysle ze od tego trzeba zaczac, i ze serializacje tez by wypadalo jakos tutaj zaczepic (skoro bedziemy miec tu tablice wynikow,
+    	//			mozna jakos z niej wyciagnac punkty kazdego gracza i je zachowac)
     	
     	int ile;
     	List<Player> players = new ArrayList<Player>();
