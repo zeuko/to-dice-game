@@ -51,20 +51,17 @@ public class HumanPlayer implements Player {
 		return stringBuilder.toString();
 	}
 
-	@Override
 	public ScoreCategory chooseScoreCategoryAgain() {
 		System.out.println("Invalid choice.");
 		return chooseScoreCategory();
 	}
 
-	@Override
 	public DiceRoll rollDice(int diceCount) {
 		DiceRoll dr = new DiceRoll(diceCount);
 		System.out.println("Your roll: "+ dr.toString());
 		return dr;
 	}
 
-	@Override
 	public DiceRoll rerollDice(DiceRoll roll, int times) {
 
 		for (int i = 0; i < times; i++) {
