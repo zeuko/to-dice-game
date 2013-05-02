@@ -20,6 +20,8 @@ public class App {
     	//			mysle ze od tego trzeba zaczac, i ze serializacje tez by wypadalo jakos tutaj zaczepic (skoro bedziemy miec tu tablice wynikow,
     	//			mozna jakos z niej wyciagnac punkty kazdego gracza i je zachowac)
     	
+    	// ScoreTable jakos boje sie ruszac, zeby nie zepsuc ;P ~Kacper
+    	
     	int ile;
     	List<Player> players = new ArrayList<Player>();
     	System.out.print("Wpisz liczbê graczy: ");
