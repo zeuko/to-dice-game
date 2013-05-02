@@ -12,22 +12,22 @@ public class ConsoleGameConfigurator implements GameConfigurator {
 		String cmd;
 		do {
 			cmd = scanner.next();
-			if(cmd == "player") {
+			if(cmd.equals("player")) {
 				gameBuilder.addPlayer(scanner.next());
-			} else if(cmd == "bot") {
+			} else if(cmd.equals("bot")) {
 				gameBuilder.addBot(scanner.next());
-			} else if(cmd == "dice") {
+			} else if(cmd.equals("dice")) {
 				gameBuilder.setDiceCount(scanner.nextInt());
-			} else if(cmd == "category") {
+			} else if(cmd.equals("category")) {
 				gameBuilder.setScoresPerCategory(scanner.nextInt());
-			} else if(cmd == "start") {
+			} else if(cmd.equals("start")) {
 				game = gameBuilder.create();
-			} else if(cmd == "-h") {
+			} else if(cmd.equals("-h")) {
 				printHelp();
 			} else {
 				System.out.println("Unsupported operation! Type -h to get help.");
 			}
-		} while(cmd != "start");
+		} while(!cmd.equals("start"));
 
 		return game;
 	}

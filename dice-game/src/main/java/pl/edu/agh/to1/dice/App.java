@@ -1,12 +1,8 @@
 package pl.edu.agh.to1.dice;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
-
+import pl.edu.agh.to1.dice.logic.ConsoleGameConfigurator;
 import pl.edu.agh.to1.dice.logic.DiceGame;
-import pl.edu.agh.to1.dice.logic.HumanPlayer;
-import pl.edu.agh.to1.dice.logic.Player;
+import pl.edu.agh.to1.dice.logic.GameConfigurator;
 
 
 public class App {
@@ -22,19 +18,8 @@ public class App {
     	
     	// ScoreTable jakos boje sie ruszac, zeby nie zepsuc ;P ~Kacper
     	
-    	int ile;
-    	List<Player> players = new ArrayList<Player>();
-    	System.out.print("Wpisz liczbê graczy: ");
-    	Scanner s = new Scanner(System.in);
-    	ile = s.nextInt();
-    	
-    	System.out.print("Imiona graczy: ");
-    	for (int i = 0; i < ile; i++) {
-    		players.add(new HumanPlayer(s.next()));
-    	}
-    	
-        new DiceGame(players).play();
-        s.close();
-    	
+    	GameConfigurator configurator = new ConsoleGameConfigurator();
+        DiceGame game = configurator.loadConfiguration();
+        game.play();	
     }
 }
