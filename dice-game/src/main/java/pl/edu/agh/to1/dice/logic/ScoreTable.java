@@ -5,15 +5,34 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-// TODO:	wyswietlanie wynikow
-// TODO:	sumowanie punktow z wielu kategorii
+// brak d¿okerów
+// zasady dla wielu kosci nieco zmodyfikowane: pominiete wymaganie dla generala 
+//	 		(nie wymaga punktu: premie za kolejne wyrzucone genera³y po pierwszym obowi¹zuj¹ pod 
+//				warunkiem, ¿e ¿aden z poprzednich genera³ów nie by³ zapisany do kategorii innej ni¿ "genera³", 
+//				kiedy ta by³a wolna);
+// premie: 	próg = 63*((scoresInCategory-1)/2) + 1;		// 1, 2 kosci: 63, 3,4 kosci: 126...	
+//			punkty za bonus = 35*scoreInCategory;		
+
+
 public class ScoreTable {
 		
+	private final Integer bonusThreshold;
+	private final int bonusValue;
 	private final int scoresInCategory;
+	
 	// mapa mapujaca mape na liste :P
 	private final Map<Player, Map<ScoreCategory, List<Score>>> scoreTable = new HashMap<Player, Map<ScoreCategory, List<Score>>>();
-	private final Map<Player, Integer> sumTableUp = new HashMap<Player, Integer>();
-	private final Map<Player, Integer> sumTableDown = new HashMap<Player, Integer>();
+	
+	/**
+	 * Total result from upper part of score table. 
+	 */
+	private final Map<Player, Integer> sumLowerTable = new HashMap<Player, Integer>();
+	
+	/**
+	 * Total result from lower part of score table. 
+	 */
+	private final Map<Player, Integer> sumUpperTable = new HashMap<Player, Integer>();
+	
 	
 	/**
 	 * Creates new ScoreTable. Must be given list of players and number of scores allowed in single category.
@@ -22,14 +41,17 @@ public class ScoreTable {
 	 * @param scoreInCategory number of scores allowed in each category
 	 */
 	public ScoreTable(List<Player> players, int scoreInCategory) {
-		scoresInCategory = scoreInCategory;
+		this.scoresInCategory = scoreInCategory;
+		this.bonusThreshold = 63*((scoresInCategory-1)/2) + 1;	// 1, 2 kosci: 63, 3,4 kosci: 126...	
+		this.bonusValue = 35*scoresInCategory;
+		
 		for (Player player : players) {
 			scoreTable.put(player, new HashMap<ScoreCategory, List<Score>>());
 			for(ScoreCategory c : ScoreCategory.values()) {
 				scoreTable.get(player).put(c, new ArrayList<Score>());
 			}
-			sumTableDown.put(player, 0);
-			sumTableUp.put(player, 0);
+			sumUpperTable.put(player, 0);
+			sumLowerTable.put(player, 0);
 		}
 	}
 	
@@ -44,56 +66,74 @@ public class ScoreTable {
 		return scoreTable.get(player).get(points.getCategory()).size() < scoresInCategory;
 	}
 	
+	
 	/**
-	 * Updates player's points in table.
+	 * Updates player's points in table assuming that operation is legal game move:
+	 * requires calling isLegal(Player,Score) previously.
+	 * When is't impossible to assign points to player passed as argument throws IllegalArgumentException.
 	 * 
 	 * @param player
 	 * @param score
 	 */
 	public void updateTable(Player player, Score score) {
+		
+		if(!isLegal(player, score)) {
+			throw new IllegalArgumentException("given score cannot be assigned to player - move is not legal");
+		}
+		
 		scoreTable.get(player).get(score.getCategory()).add(score);	
 		if (score.getCategory().ordinal() <= ScoreCategory.SIXES.ordinal()) {
-			sumTableDown.put(player, sumTableDown.get(player) + score.getPoints());
+			sumUpperTable.put(player, sumUpperTable.get(player) + score.getPoints());
 		} else {
-			sumTableUp.put(player, sumTableUp.get(player) + score.getPoints());
+			if (score.getCategory() == ScoreCategory.GENERAL) {
+				sumLowerTable.put(player, sumLowerTable.get(player) + score.getPoints()*scoreTable.get(player).get(score.getCategory()).size());
+			} else {
+				sumLowerTable.put(player, sumLowerTable.get(player) + score.getPoints());
+			}
 		}
 	}
 	
 	/*
-	 * Mess, mess, mess.
-	 * 
+	 * A bit less mess. 
 	 */
 	public void printTable() {
+		
+		//
+		String stringFormatFixed = "%15s";
+		String stringFormatAdjustable = "%"+(1+scoresInCategory*4)+"s";
+		String integerFormat = "%"+(1+scoresInCategory*4)+"d";
+		
+		// line of proper length, for neat table look
 		String line = "\n---------------";
-		for(int i = 0; i <= scoreTable.size(); i++) { line += "----------";	}
-		for(int i = 0; i <= scoresInCategory; i++) { line += "----";	}
+		for(int i = 0; i <= scoreTable.size(); i++) 	{ line += "----------";	}
+		for(int i = 0; i <= scoresInCategory; i++) 		{ line += "----";		}
 		
+		// header (category & players)
 		System.out.println(line);
-		System.out.format("%15s", "category".toUpperCase());
+		System.out.format(stringFormatFixed, "category".toUpperCase());
 		for (Player p : scoreTable.keySet()) {
-			System.out.format("%"+(4+scoresInCategory*4)+"s", p.getName());
+			System.out.format(stringFormatAdjustable, p.getName());
 		}
-		
 		System.out.println(line);
 		
+		// categories & scores
 		for (ScoreCategory c : ScoreCategory.values()) {
-			System.out.format("%15s", c.toString().toLowerCase().replaceAll("_", " "));
+			System.out.format(stringFormatFixed, c.toString().toLowerCase().replaceAll("_", " "));
 			for (Player p : scoreTable.keySet()) {
-				System.out.format("%"+scoresInCategory*4+"s", getPointsOnly(p, c));
+				System.out.format(stringFormatAdjustable, getPointsOnly(p, c));
 			}
 			
 			if (c == ScoreCategory.SIXES) {
-				
 				System.out.println(line);
-				System.out.format("%15s", "bonus");
+				System.out.format(stringFormatFixed, "bonus");
 				for (Player p : scoreTable.keySet()) {
-					System.out.format("%10d",sumTableDown.get(p) > 63 ? 35 : 0);
+					System.out.format(integerFormat, getBonusPointsIfShould(p));
 				}
 				
 				System.out.println(line);
-				System.out.format("%15s", "sum");
+				System.out.format(stringFormatFixed, "sum");
 				for (Player p : scoreTable.keySet()) {
-					System.out.format("%10d",sumTableDown.get(p));
+					System.out.format(integerFormat,sumUpperTable.get(p) + getBonusPointsIfShould(p));
 				}
 				System.out.print(line);
 			
@@ -102,16 +142,16 @@ public class ScoreTable {
 			System.out.println();
 		}
 		
-		System.out.println(line.trim());
-		System.out.format("%15s", "sum");
+		System.out.println(line);
+		System.out.format(stringFormatFixed, "sum");
 		for (Player p : scoreTable.keySet()) {
-			System.out.format("%10d",sumTableUp.get(p));
+			System.out.format(integerFormat,sumLowerTable.get(p));
 		}
 		
 		System.out.println(line);
-		System.out.format("%15s", "total");
+		System.out.format(stringFormatFixed, "total");
 		for (Player p : scoreTable.keySet()) {
-			System.out.format("%10d", computeTotal(p));
+			System.out.format(integerFormat, computeTotal(p));
 		}
 		
 		System.out.println(line);
@@ -130,7 +170,7 @@ public class ScoreTable {
 		List<Score> pointsList = scoreTable.get(p).get(c);
 		StringBuilder pointsBuilder = new StringBuilder("");
 		for (Score s : pointsList)
-			pointsBuilder.append(s.getPoints()).append(" ");
+			pointsBuilder.append(s.getPoints()).append("  ");
 		return pointsBuilder.toString().trim();
 	}
 
@@ -157,7 +197,11 @@ public class ScoreTable {
 	}
 	
 	private int computeTotal(Player p) {
-		return sumTableUp.get(p)+sumTableDown.get(p)+ ((sumTableDown.get(p) > 63) ? 35 : 0);
+		return sumLowerTable.get(p)+sumUpperTable.get(p)+getBonusPointsIfShould(p);
+	}
+	
+	private int getBonusPointsIfShould(Player p) {
+		return ((sumUpperTable.get(p) > bonusThreshold) ? bonusValue : 0);
 	}
 	
 }
