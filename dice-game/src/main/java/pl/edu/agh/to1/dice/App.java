@@ -1,12 +1,8 @@
 package pl.edu.agh.to1.dice;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
-
+import pl.edu.agh.to1.dice.logic.ConsoleGameConfigurator;
 import pl.edu.agh.to1.dice.logic.DiceGame;
-import pl.edu.agh.to1.dice.logic.HumanPlayer;
-import pl.edu.agh.to1.dice.logic.Player;
+import pl.edu.agh.to1.dice.logic.GameConfigurator;
 
 
 public class App {
@@ -20,19 +16,10 @@ public class App {
     	//			mysle ze od tego trzeba zaczac, i ze serializacje tez by wypadalo jakos tutaj zaczepic (skoro bedziemy miec tu tablice wynikow,
     	//			mozna jakos z niej wyciagnac punkty kazdego gracza i je zachowac)
     	
-    	int ile;
-    	List<Player> players = new ArrayList<Player>();
-    	System.out.print("Wpisz liczbê graczy: ");
-    	Scanner s = new Scanner(System.in);
-    	ile = s.nextInt();
+    	// ScoreTable jakos boje sie ruszac, zeby nie zepsuc ;P ~Kacper
     	
-    	System.out.print("Imiona graczy: ");
-    	for (int i = 0; i < ile; i++) {
-    		players.add(new HumanPlayer(s.next()));
-    	}
-    	
-        new DiceGame(players).play();
-        s.close();
-    	
+    	GameConfigurator configurator = new ConsoleGameConfigurator();
+        DiceGame game = configurator.loadConfiguration();
+        game.play();	
     }
 }

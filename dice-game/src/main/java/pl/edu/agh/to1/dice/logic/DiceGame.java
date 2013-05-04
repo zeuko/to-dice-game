@@ -4,25 +4,36 @@ import java.util.List;
 
 
 // TODO:	pozbyc sie System.out.println() ;]
-
+//		Mozna zrefaktoryzowac do Model-View, ale czy nam to narazie potrzebne? ~Kacper
+// 		Na razie kompletnie niepotrzebne, tak tylko na przysz³oœæ tu zasygnalizowa³am ¿eby siê
+//		do tego nei przywi¹zywaæ specjalnie. /Patrycja
 public class DiceGame {
 
 	// TODO  moze w konstruktorze? 
-	private final int DICE_COUNT = 5;
-	private final int REROLL_TIMES = 2;
-	private final int SCORES_PER_CATEGORY = 1;
-	private final int TURN_NR = ScoreCategory.values().length * SCORES_PER_CATEGORY;
+	// all right, majac GameBuildera jest spoko. ~Kacper
+	private final int DICE_COUNT;
+	private final int REROLL_TIMES;
+	private final int SCORES_PER_CATEGORY;
+	
+	// TODO zmienilbym nazwe tej stalej - nie wiem za bardzo co robi i czy ja przeniesc do konstruktora. ~Kacper
+	//	niee, nie do konstruktora - to jest ilosc tur w grze, czyli ilosc kategorii * ilosc mozliwych
+	//	do uzyskania wynikow w danej kategorii; nazwa niefortunna, teraz lepiej? /Patrycja
+	private final int NR_OF_TURNS;
 	
 	private final List<Player> players;
 	private final ScoreTable table;
 	
-	public DiceGame(List<Player> players) {
+	DiceGame(List<Player> players, int diceCount, int rerollTimes, int scoresPerCategory) {
+		DICE_COUNT = diceCount;
+		REROLL_TIMES = rerollTimes;
+		SCORES_PER_CATEGORY = scoresPerCategory;
+		NR_OF_TURNS = ScoreCategory.values().length * SCORES_PER_CATEGORY;
 		table = new ScoreTable(players, SCORES_PER_CATEGORY);
 		this.players = players;
 	}
 
 	public void play() {
-		for (int turnNr = 1; turnNr <= TURN_NR; turnNr++) {
+		for (int turnNr = 1; turnNr <= NR_OF_TURNS; turnNr++) {
 			for (Player player : players) {
 				table.printTable();
 				System.out.println("TURN " + turnNr + "\n" + player.toString());
