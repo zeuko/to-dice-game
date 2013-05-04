@@ -127,13 +127,13 @@ public class ScoreTable {
 				System.out.println(line);
 				System.out.format(stringFormatFixed, "bonus");
 				for (Player p : scoreTable.keySet()) {
-					System.out.format(integerFormat, getBonusPointsIfShould(p));
+					System.out.format(integerFormat, getBonusPointsIfDue(p));
 				}
 				
 				System.out.println(line);
 				System.out.format(stringFormatFixed, "sum");
 				for (Player p : scoreTable.keySet()) {
-					System.out.format(integerFormat,sumUpperTable.get(p) + getBonusPointsIfShould(p));
+					System.out.format(integerFormat,sumUpperTable.get(p) + getBonusPointsIfDue(p));
 				}
 				System.out.print(line);
 			
@@ -197,10 +197,17 @@ public class ScoreTable {
 	}
 	
 	private int computeTotal(Player p) {
-		return sumLowerTable.get(p)+sumUpperTable.get(p)+getBonusPointsIfShould(p);
+		return sumLowerTable.get(p)+sumUpperTable.get(p)+getBonusPointsIfDue(p);
 	}
 	
-	private int getBonusPointsIfShould(Player p) {
+	/**
+	 * Returns bonus points for player passed as argument, or 0 if player
+	 * doesn't meet the requirements for receiving bonus.
+	 * 
+	 * @param p
+	 * @return
+	 */
+	private int getBonusPointsIfDue(Player p) {
 		return ((sumUpperTable.get(p) > bonusThreshold) ? bonusValue : 0);
 	}
 	
