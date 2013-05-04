@@ -16,6 +16,8 @@ public class ConsoleGameConfigurator implements GameConfigurator {
 				gameBuilder.addPlayer(scanner.next());
 			} else if(cmd.equals("bot")) {
 				gameBuilder.addBot(scanner.next());
+				
+				// TODO: zmienic dice i category na wybor trybu: zwykle/potrojne kosci
 			} else if(cmd.equals("dice")) {
 				gameBuilder.setDiceCount(scanner.nextInt());
 			} else if(cmd.equals("category")) {
