@@ -9,15 +9,9 @@ import java.util.List;
 //		do tego nei przywi¹zywaæ specjalnie. /Patrycja
 public class DiceGame {
 
-	// TODO  moze w konstruktorze? 
-	// all right, majac GameBuildera jest spoko. ~Kacper
 	private final int DICE_COUNT;
 	private final int REROLL_TIMES;
 	private final int SCORES_PER_CATEGORY;
-	
-	// TODO zmienilbym nazwe tej stalej - nie wiem za bardzo co robi i czy ja przeniesc do konstruktora. ~Kacper
-	//	niee, nie do konstruktora - to jest ilosc tur w grze, czyli ilosc kategorii * ilosc mozliwych
-	//	do uzyskania wynikow w danej kategorii; nazwa niefortunna, teraz lepiej? /Patrycja
 	private final int NR_OF_TURNS;
 	
 	private final List<Player> players;
