@@ -124,6 +124,10 @@ public class DiceRoll {
 	public boolean contains(int i) {
 		return diceSet.contains(Dice.valueOf(i));
 	}
+	
+	public int getDiceValue(int nr){
+	    return diceSet.get(nr).getValue();
+	}
 
 	@Override
 	public String toString() {
