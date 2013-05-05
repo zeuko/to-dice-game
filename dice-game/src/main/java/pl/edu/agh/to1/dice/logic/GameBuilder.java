@@ -23,6 +23,7 @@ public class GameBuilder {
 	    	    players.add( new BotPlayer(botName, false) );
 	    	else
 	    	    players.add( new BotPlayer(botName, true) );
+	    	
 		return this;
 		
 	}
