@@ -17,8 +17,15 @@ public class GameBuilder {
 		return this;
 	}
 	
-	public GameBuilder addBot(String botName) {
-		throw new UnsupportedOperationException("Not yet implemented");
+	public GameBuilder addBot(String botName) { 
+	    //zakladam, ze wariant gry wybrany przed tworzeniem botow
+	    	if( scoresPerCategory == DEFAULT_SCORES_PER_CATEGORY)
+	    	    players.add( new BotPlayer(botName, false) );
+	    	else
+	    	    players.add( new BotPlayer(botName, true) );
+	    	
+		return this;
+		
 	}
 	
 	public int getDefaultRerollTimes() {
