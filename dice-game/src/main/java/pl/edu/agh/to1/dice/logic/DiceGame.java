@@ -1,5 +1,6 @@
 package pl.edu.agh.to1.dice.logic;
 
+import java.io.IOException;
 import java.util.List;
 
 
@@ -44,7 +45,11 @@ public class DiceGame {
 		else
 			System.out.println("There's a tie! Congratulations!");
 		
-		HighScore.getInstance().update(players, table);
+		try {
+			HighScore.getInstance().update(players, table, SCORES_PER_CATEGORY);
+		} catch (IOException e) {
+			System.out.println("Encoutered error when trying to update high scores! :(");
+		}
 	}
 
 	private Score takeTurn(Player player) {
