@@ -40,7 +40,7 @@ public class DiceGame {
 		table.printTable();
 		List<Player> winner = table.getWinner();
 		if (winner.size() == 1)
-			System.out.println("The winner is: " + table.getWinner().get(0)
+			System.out.println("The winner is: " + table.getWinner().get(0).getName()
 					+ ". Congratulations!");
 		else
 			System.out.println("There's a tie! Congratulations!");

@@ -36,8 +36,7 @@ public class HighScore {
 		int mapSize = scoreMap.size();
 		for(int entry=0; entry < Math.min(MAX_ENTRIES, mapSize); entry++) {
 			Entry<Integer, String> mapEntry = scoreMap.pollLastEntry();
-			System.out.println(mapEntry.getKey() + " " + mapEntry.getValue());
-			writer.write(mapEntry.getKey() + " " + mapEntry.getValue());
+			writer.write(mapEntry.getKey() + " " + mapEntry.getValue() + "\n");
 		}
 		writer.close();
 	}
