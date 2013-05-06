@@ -151,7 +151,7 @@ public class ScoreTable {
 		System.out.println(line);
 		System.out.format(stringFormatFixed, "total");
 		for (Player p : scoreTable.keySet()) {
-			System.out.format(integerFormat, computeTotal(p));
+			System.out.format(integerFormat, computeTotalScore(p));
 		}
 		
 		System.out.println(line);
@@ -183,7 +183,7 @@ public class ScoreTable {
 		int currMaxPoints = 0;
 		
 		for (Player p : scoreTable.keySet()) {
-			int playerScore = computeTotal(p);
+			int playerScore = computeTotalScore(p);
 			if (playerScore > currMaxPoints) {
 				winner.clear();
 				winner.add(p);
@@ -196,7 +196,7 @@ public class ScoreTable {
 		return winner;
 	}
 	
-	private int computeTotal(Player p) {
+	public int computeTotalScore(Player p) {
 		return sumLowerTable.get(p)+sumUpperTable.get(p)+getBonusPointsIfDue(p);
 	}
 	

@@ -43,6 +43,8 @@ public class DiceGame {
 					+ ". Congratulations!");
 		else
 			System.out.println("There's a tie! Congratulations!");
+		
+		HighScore.getInstance().update(players, table);
 	}
 
 	private Score takeTurn(Player player) {
