@@ -15,7 +15,6 @@ public class HighScore {
 	
 	private HighScore() {}
 	
-
 	public static HighScore getInstance() {
 		if(instance == null) {
 			instance = new HighScore();
@@ -33,9 +32,7 @@ public class HighScore {
 	
 	private void saveHighScores(TreeMap<Integer, String> scoreMap, int scoresPerCategory) throws IOException {
 		String filename = getHighScoreFileName(scoresPerCategory);	
-		System.out.println("Attemping to open for writing");
 		FileWriter writer = new FileWriter(filename);
-		System.out.println("Opened file for writing");
 		int mapSize = scoreMap.size();
 		for(int entry=0; entry < Math.min(MAX_ENTRIES, mapSize); entry++) {
 			Entry<Integer, String> mapEntry = scoreMap.pollLastEntry();
@@ -54,13 +51,11 @@ public class HighScore {
 	
 	private void loadHighScores(Map<Integer, String> scores, int scoresPerCategory) throws IOException {
 		String filename = getHighScoreFileName(scoresPerCategory);
-		System.out.println("Attemping to open for reading");
 		File highScoreFile = new File(filename);
 		if(!highScoreFile.exists()) {
 			highScoreFile.createNewFile();
 		}
 		Scanner scanner = new Scanner( new File(filename) );
-		System.out.println("Opened file for reading");
 		
 		while(scanner.hasNext()) {
 			int score = scanner.nextInt();
