@@ -16,12 +16,10 @@ public class ConsoleGameConfigurator implements GameConfigurator {
 				gameBuilder.addPlayer(scanner.next());
 			} else if(cmd.equals("bot")) {
 				gameBuilder.addBot(scanner.next());
-				
-				// TODO: zmienic dice i category na wybor trybu: zwykle/potrojne kosci
-			} else if(cmd.equals("dice")) {
-				gameBuilder.setDiceCount(scanner.nextInt());
-			} else if(cmd.equals("category")) {
-				gameBuilder.setScoresPerCategory(scanner.nextInt());
+			} else if(cmd.equals("normal")) {
+				gameBuilder.setScoresPerCategory(gameBuilder.getDefaultScoresPerCategory());
+			} else if(cmd.equals("triple")) {
+				gameBuilder.setScoresPerCategory(3);
 			} else if(cmd.equals("start")) {
 				game = gameBuilder.create();
 			} else if(cmd.equals("-h")) {
@@ -37,10 +35,8 @@ public class ConsoleGameConfigurator implements GameConfigurator {
 	private void printHelp() {
 		System.out.println("player player_name - adds a player with player_name name");
 		System.out.println("bot bot_name - adds a bot with bot_name name");
-		System.out.println("dice n - changes dice count of each player to n (default " + 
-				gameBuilder.getDefaultDiceCount() + ")");
-		System.out.println("category n - changes score per category to n (default " + 
-				gameBuilder.getDefaultScoresPerCategory() + ")");
+		System.out.println("normal - set normal dice game (default)");
+		System.out.println("triple - set triple dice game");
 		System.out.println("start - to start the game.");
 	}
 
