@@ -1,6 +1,9 @@
 package pl.edu.agh.to1.dice.logic;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import pl.edu.agh.to1.dice.view.IOHandler;
 
@@ -40,6 +43,12 @@ public class DiceGame {
 			}
 		}
 		view.showWinner(table.getWinner(), table.toString());
+		
+		try {
+			HighScore.getInstance().update(players, table, SCORES_PER_CATEGORY);
+		} catch (IOException e) {
+			Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "Encoutered error when trying to update high scores! :(");
+		}
 	}
 
 	private Score takeTurn(Player player) {
