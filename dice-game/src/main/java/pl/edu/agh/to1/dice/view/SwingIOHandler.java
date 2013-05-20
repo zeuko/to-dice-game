@@ -15,7 +15,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-import javax.swing.JTextField;
+import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 
 import pl.edu.agh.to1.dice.logic.DiceRoll;
@@ -31,6 +31,7 @@ public class SwingIOHandler implements IOHandler {
 
 	public void showTable(String table) {
 		scoreField.setText(table);
+		System.out.println(table);
 		mainFrame.pack();
 		mainFrame.repaint();
 	}
@@ -92,7 +93,7 @@ public class SwingIOHandler implements IOHandler {
 	private boolean diceSaved = false;
 	private Object waitForClick = new Object();
 	private JFrame mainFrame = new JFrame();
-	private JTextField scoreField = new JTextField();
+	private JTextArea scoreField = new JTextArea();
 	private JPanel dicePanel = new JPanel();
 	private JPanel scoreCatPanel = new JPanel();
 	private JCheckBox diceCheckBoxes[] = new JCheckBox[5];
