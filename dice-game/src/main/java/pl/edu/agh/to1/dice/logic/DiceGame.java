@@ -2,7 +2,6 @@ package pl.edu.agh.to1.dice.logic;
 
 import java.util.List;
 
-import pl.edu.agh.to1.dice.view.ConsoleIOHandler;
 import pl.edu.agh.to1.dice.view.IOHandler;
 
 
@@ -30,6 +29,7 @@ public class DiceGame {
 	}
 
 	public void play() {
+		view.init();
 		for (int turnNr = 1; turnNr <= NR_OF_TURNS; turnNr++) {
 			for (Player player : players) {
 				view.showTable(table.toString());
@@ -39,7 +39,6 @@ public class DiceGame {
 				table.updateTable(player, currentTurnScore);
 			}
 		}
-
 		view.showWinner(table.getWinner(), table.toString());
 	}
 

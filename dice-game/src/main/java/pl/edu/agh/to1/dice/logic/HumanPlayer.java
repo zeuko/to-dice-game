@@ -1,8 +1,5 @@
 package pl.edu.agh.to1.dice.logic;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import pl.edu.agh.to1.dice.view.IOHandler;
 
 public class HumanPlayer implements Player {
@@ -18,14 +15,27 @@ public class HumanPlayer implements Player {
 		this.ioHandler = ioh;
 	}
 
-	public ScoreCategory chooseScoreCategory() {
-		return ioHandler.getScoreCategory();
-	}
-
 	public String getName() {
 		return playerName;
 	}
 
+	public ScoreCategory chooseScoreCategory() {
+		return ioHandler.getScoreCategory();
+	}
+
+	public ScoreCategory chooseScoreCategoryAgain() {
+		return ioHandler.chooseScoreCategoryAgain();
+	}
+
+	public DiceRoll rollDice(int diceCount) {
+		return ioHandler.rollDice(diceCount);
+	}
+
+	public DiceRoll rerollDice(DiceRoll roll, int times) {
+		return ioHandler.rerollDice(roll, times);	
+	}
+
+	
 	@Override
 	public String toString() {
 		StringBuilder stringBuilder = new StringBuilder();
@@ -35,18 +45,6 @@ public class HumanPlayer implements Player {
 		stringBuilder.append(playerID);
 		stringBuilder.append(")");
 		return stringBuilder.toString();
-	}
-
-	public ScoreCategory chooseScoreCategoryAgain() {
-		return ioHandler.chooseScoreCategory();
-	}
-
-	public DiceRoll rollDice(int diceCount) {
-		return ioHandler.rollDice(diceCount);
-	}
-
-	public DiceRoll rerollDice(DiceRoll roll, int times) {
-		return ioHandler.rerollDice(roll, times);	
 	}
 
 }

@@ -1,4 +1,6 @@
-package pl.edu.agh.to1.dice.logic;
+package pl.edu.agh.to1.dice.view;
+
+import pl.edu.agh.to1.dice.logic.DiceGame;
 
 /**
  * 

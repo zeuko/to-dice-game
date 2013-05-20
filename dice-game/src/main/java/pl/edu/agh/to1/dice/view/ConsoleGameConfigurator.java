@@ -1,9 +1,9 @@
-package pl.edu.agh.to1.dice.logic;
+package pl.edu.agh.to1.dice.view;
 
 import java.util.Scanner;
 
-import pl.edu.agh.to1.dice.view.ConsoleIOHandler;
-import pl.edu.agh.to1.dice.view.IOHandler;
+import pl.edu.agh.to1.dice.logic.DiceGame;
+import pl.edu.agh.to1.dice.logic.GameBuilder;
 
 public class ConsoleGameConfigurator implements GameConfigurator {
 	private GameBuilder gameBuilder = new GameBuilder();
