@@ -1,13 +1,13 @@
 package pl.edu.agh.to1.dice.logic;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 public enum ScoreCategory {
 	ONES, TWOS, THREES,	FOURS, FIVES, SIXES, THREE_OF_A_KIND, FOUR_OF_A_KIND, FULL_HOUSE, 
 	LOW_STRAIGHT, HIGH_STRAIGHT, GENERAL, CHANCE, EVEN, ODD;
 	
-	private final static Map<String, ScoreCategory> TYPE = new HashMap<String, ScoreCategory>();
+	private final static Map<String, ScoreCategory> TYPE = new TreeMap<String, ScoreCategory>();
 	
 	// MAP INITIALIZATION
 	static {	TYPE.put("1", ONES);
@@ -26,6 +26,10 @@ public enum ScoreCategory {
 				TYPE.put("parz", EVEN);
 				TYPE.put("nieparz", ODD);
 			}
+	
+	public static Map<String, ScoreCategory> getCategoryMap() {
+		return TYPE;
+	}
 	
 	public static ScoreCategory getResult(String resultType) throws GameLogicException {
 		if (TYPE.get(resultType) == null)

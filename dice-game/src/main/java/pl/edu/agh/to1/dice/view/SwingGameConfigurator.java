@@ -46,7 +46,7 @@ public class SwingGameConfigurator implements GameConfigurator {
 	public void createAndShow() {
 		configurationWindow = new JFrame("DICE GAME");
 		configurationWindow.setSize(400, 400);
-		configurationWindow.setVisible(true);
+		
 
 		
 		// UPPER PANEL
@@ -63,6 +63,9 @@ public class SwingGameConfigurator implements GameConfigurator {
 		JButton load = new JButton("Start Game");
 		load.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				if(player1.getText().equals("") || player2.getText().equals("")) {
+					return;
+				}
 				lock.lock();
 				try {
 					gameDone = true;
@@ -76,7 +79,7 @@ public class SwingGameConfigurator implements GameConfigurator {
 		load.setPreferredSize(new Dimension(180, 60));
 		buttonPanel.add(load);
 		
-
+		configurationWindow.setVisible(true);
 	}
 
 	private JPanel createPlayerChoicePanel() {

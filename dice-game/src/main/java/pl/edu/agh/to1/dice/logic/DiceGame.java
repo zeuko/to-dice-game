@@ -9,8 +9,6 @@ import pl.edu.agh.to1.dice.view.IOHandler;
 
 
 public class DiceGame {
-
-
 	private final int DICE_COUNT;
 	private final int REROLL_TIMES;
 	private final int SCORES_PER_CATEGORY;
@@ -33,7 +31,7 @@ public class DiceGame {
 
 	public void play() {
 		view.init();
-		for (int turnNr = 1; turnNr <= NR_OF_TURNS; turnNr++) {
+		/*for (int turnNr = 1; turnNr <= NR_OF_TURNS; turnNr++) {
 			for (Player player : players) {
 				view.showTable(table.toString());
 				view.newTurn(turnNr, player.toString());
@@ -47,8 +45,8 @@ public class DiceGame {
 		try {
 			HighScore.getInstance().update(players, table, SCORES_PER_CATEGORY);
 		} catch (IOException e) {
-			Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "Encoutered error when trying to update high scores! :(");
-		}
+			Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "Encountered error when trying to update high scores! :(");
+		}*/
 	}
 
 	private Score takeTurn(Player player) {
