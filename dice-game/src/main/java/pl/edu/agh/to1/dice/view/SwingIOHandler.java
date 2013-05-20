@@ -36,6 +36,7 @@ public class SwingIOHandler implements IOHandler {
 	private JCheckBox diceCheckBoxes[] = new JCheckBox[5];
 	ButtonGroup buttonCategoryGroup = new ButtonGroup();
 	private int diceNr;
+	private boolean choosingScoreCategory = false;
     
 	public void showWinner(List<Player> winner, String finalTable) {
 		scoreField.setText(finalTable);
@@ -62,6 +63,19 @@ public class SwingIOHandler implements IOHandler {
 	}
 
 	public ScoreCategory getScoreCategory() {
+	    	synchronized(waitForClick) {
+	    	    while(buttonCategoryGroup.getSelection() == null) {
+	    		choosingScoreCategory = true;
+    			try {
+				waitForClick.wait();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+	    	    }
+	    	    diceSaved = false;
+	    	}
+	    	choosingScoreCategory = false;
+	    	
 		System.out.println("Chose " + buttonCategoryGroup.getSelection().getActionCommand());
 		return ScoreCategory.getCategoryMap().get(buttonCategoryGroup.getSelection().getActionCommand());
 	}
@@ -170,7 +184,8 @@ public class SwingIOHandler implements IOHandler {
 					diceSaved = true;
 					
 					waitForClick.notifyAll();
-					System.out.println("Clicked! diceSaved=" + diceSaved);
+					if(!choosingScoreCategory)
+					    System.out.println("Clicked! diceSaved=" + diceSaved);
 				}
 			}
 			
