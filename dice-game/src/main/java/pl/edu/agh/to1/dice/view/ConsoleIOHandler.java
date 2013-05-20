@@ -107,8 +107,7 @@ public class ConsoleIOHandler implements IOHandler {
 	}
 
 	public void init() {
-		// TODO Auto-generated method stub
-		
+		System.out.println("Have fun and good luck!");
 	}
 
 
