@@ -47,8 +47,8 @@ public class SwingIOHandler implements IOHandler {
 	}
 
 	public ScoreCategory getScoreCategory() {
-		System.out.println("Chose " + buttonCategoryGroup.getSelection());
-		return ScoreCategory.getCategoryMap().get(buttonCategoryGroup.getSelection());
+		System.out.println("Chose " + buttonCategoryGroup.getSelection().getActionCommand());
+		return ScoreCategory.getCategoryMap().get(buttonCategoryGroup.getSelection().getActionCommand());
 	}
 
 	public DiceRoll rollDice(int diceCount) {
@@ -117,17 +117,22 @@ public class SwingIOHandler implements IOHandler {
 		diceSelectedButton.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent actionEvent) {
-				diceSaved = true;
-				waitForClick.notify();
+				System.out.println("CLICK");
+				synchronized(waitForClick) {
+					diceSaved = true;
+					waitForClick.notifyAll();
+					System.out.println("Clicked! diceSaved=" + diceSaved);
+				}
 			}
 			
 		});
-		dicePanel.add( new JButton("Go!") );
+		dicePanel.add( diceSelectedButton );
 		
 		scoreCatPanel.setLayout(new BoxLayout(scoreCatPanel, BoxLayout.Y_AXIS));
 		
 		for( final Entry<String, ScoreCategory> entry : ScoreCategory.getCategoryMap().entrySet() ) {
 			JRadioButton button = new JRadioButton(entry.getKey());
+			button.setActionCommand(entry.getKey());
 			scoreCatPanel.add( button );
 			buttonCategoryGroup.add( button );
 		}
