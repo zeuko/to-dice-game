@@ -31,7 +31,7 @@ public class DiceGame {
 
 	public void play() {
 		view.init();
-		/*for (int turnNr = 1; turnNr <= NR_OF_TURNS; turnNr++) {
+		for (int turnNr = 1; turnNr <= NR_OF_TURNS; turnNr++) {
 			for (Player player : players) {
 				view.showTable(table.toString());
 				view.newTurn(turnNr, player.toString());
@@ -46,7 +46,7 @@ public class DiceGame {
 			HighScore.getInstance().update(players, table, SCORES_PER_CATEGORY);
 		} catch (IOException e) {
 			Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "Encountered error when trying to update high scores! :(");
-		}*/
+		}
 	}
 
 	private Score takeTurn(Player player) {
