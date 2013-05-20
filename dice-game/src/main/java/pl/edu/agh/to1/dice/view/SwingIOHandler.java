@@ -86,7 +86,7 @@ public class SwingIOHandler implements IOHandler {
 		for(int i=0; i<diceCount; ++i) {
 			diceCheckBoxes[i].setText(""+dr.getDiceValue(i));
 		}
-		newsField.setText("Pierwszy rzut");
+		newsField.setText("1 rzut");
 		System.out.println("Rolled " + dr);
 		mainFrame.repaint();
 		synchronized(waitForClick) {
@@ -160,7 +160,7 @@ public class SwingIOHandler implements IOHandler {
 	
 	public void createAndShow() {
 		mainFrame = new JFrame("DICE GAME");
-		mainFrame.setSize(600, 400);
+		mainFrame.setSize(600, 500);
 		BorderLayout mainPanelLayout = new BorderLayout();
 		mainFrame.setLayout(mainPanelLayout);
 		Container pane = mainFrame.getContentPane();
