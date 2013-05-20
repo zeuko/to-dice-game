@@ -35,6 +35,7 @@ public class SwingIOHandler implements IOHandler {
 	private JPanel scoreCatPanel = new JPanel();
 	private JCheckBox diceCheckBoxes[] = new JCheckBox[5];
 	ButtonGroup buttonCategoryGroup = new ButtonGroup();
+	private int diceNr;
     
 	public void showWinner(List<Player> winner, String finalTable) {
 		scoreField.setText(finalTable);
@@ -54,7 +55,9 @@ public class SwingIOHandler implements IOHandler {
 	}
 
 	public void newTurn(int turnNr, String string) {
-		// TODO Auto-generated method stub
+		for(int i=0; i<diceNr; ++i){
+		    diceCheckBoxes[i].setSelected(false);
+		}
 
 	}
 
@@ -64,6 +67,7 @@ public class SwingIOHandler implements IOHandler {
 	}
 
 	public DiceRoll rollDice(int diceCount) {
+	    	diceNr = diceCount;
 		DiceRoll dr = new DiceRoll(diceCount);
 		for(int i=0; i<diceCount; ++i) {
 			diceCheckBoxes[i].setText(""+dr.getDiceValue(i));
@@ -89,30 +93,36 @@ public class SwingIOHandler implements IOHandler {
 	}
 
 	public DiceRoll rerollDice(DiceRoll roll, int times) {
-	    
-	    	List<Integer> toFreeze = saveToFreeze(5);
-	    	try{
-	    	    roll.freeze(toFreeze);
-	    	}catch( GameLogicException e ){
-	    	    System.out.println("GameLogicException");
-	    	}
 	    	
-	    	roll.roll();
-		for(int i=0; i<5; ++i) {
-			diceCheckBoxes[i].setText(""+roll.getDiceValue(i));
-		}
-		newsField.setText("Nastepny rzut");
-		mainFrame.repaint();
-		synchronized(waitForClick) {
-			while(!diceSaved) {
-				try {
+	    	for(int j=0; j<times; ++j){
+	    	    List<Integer> toFreeze = saveToFreeze(diceNr);
+	    	    try{
+	    		roll.freeze(toFreeze);
+	    	    }catch( GameLogicException e ){
+	    		System.out.println("GameLogicException");
+	    	    }
+	    	
+	    	    roll.roll();
+	    	    for(int i=0; i<5; ++i) {
+	    			diceCheckBoxes[i].setText(""+roll.getDiceValue(i));
+	    	    }
+	    	    String text = j+2 + " rzut";
+	    	    newsField.setText(text);
+	    	    mainFrame.repaint();
+	    	    synchronized(waitForClick) {
+	    		while(!diceSaved) {
+	    			    try {
 					waitForClick.wait();
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
-			}
+	    		}
 			diceSaved = false;
-		}
+	    	    }
+	    	    
+	    	}
+	    	newsField.setText("Wybierz kategorie");
+	    	mainFrame.repaint();
 		return roll;
 	}
 	
