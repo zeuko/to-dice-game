@@ -26,7 +26,7 @@ import pl.edu.agh.to1.dice.logic.ScoreCategory;
 
 public class SwingIOHandler implements IOHandler {
     	
-    	private boolean diceSaved = false;
+   	private boolean diceSaved = false;
 	private Object waitForClick = new Object();
 	private JFrame mainFrame = new JFrame();
 	private JTextArea scoreField = new JTextArea();
@@ -76,8 +76,11 @@ public class SwingIOHandler implements IOHandler {
 	    	}
 	    	choosingScoreCategory = false;
 	    	
-		System.out.println("Chose " + buttonCategoryGroup.getSelection().getActionCommand());
-		return ScoreCategory.getCategoryMap().get(buttonCategoryGroup.getSelection().getActionCommand());
+	    String command = buttonCategoryGroup.getSelection().getActionCommand();
+		System.out.println("Chose " + command);
+		buttonCategoryGroup.getSelection().setEnabled(false);
+    	buttonCategoryGroup.clearSelection();
+		return ScoreCategory.getCategoryMap().get(command);
 	}
 
 	public DiceRoll rollDice(int diceCount) {
