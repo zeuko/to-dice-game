@@ -6,7 +6,6 @@ import pl.edu.agh.to1.dice.logic.DiceRoll;
 import pl.edu.agh.to1.dice.logic.Player;
 import pl.edu.agh.to1.dice.logic.ScoreCategory;
 
-
 public interface IOHandler {
 
 	public void showWinner(List<Player> winner, String finalTable);

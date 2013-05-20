@@ -10,7 +10,7 @@ import pl.edu.agh.to1.dice.logic.Player;
 import pl.edu.agh.to1.dice.logic.ScoreCategory;
 
 public class ConsoleIOHandler implements IOHandler {
-	
+
 	private Scanner scanner = new Scanner(System.in);
 
 	public void showTable(String table) {
@@ -18,8 +18,8 @@ public class ConsoleIOHandler implements IOHandler {
 	}
 
 	public void showPoints(int points) {
-		System.out.println("Points awarded: "+points);
-		
+		System.out.println("Points awarded: " + points);
+
 	}
 
 	public void newTurn(int turnNr, String playerName) {
@@ -27,7 +27,8 @@ public class ConsoleIOHandler implements IOHandler {
 	}
 
 	public ScoreCategory getScoreCategory() {
-		System.out.println("Categories: 1 2 3 4 5 6 3ki 4ki f ms ds g sz parz nieparz");
+		System.out
+				.println("Categories: 1 2 3 4 5 6 3ki 4ki f ms ds g sz parz nieparz");
 		System.out.print("Your choice:  ");
 		ScoreCategory sc = null;
 		boolean done = false;
@@ -52,7 +53,7 @@ public class ConsoleIOHandler implements IOHandler {
 
 	public DiceRoll rollDice(int diceCount) {
 		DiceRoll dr = new DiceRoll(diceCount);
-		System.out.println("Your roll: "+ dr.toString());
+		System.out.println("Your roll: " + dr.toString());
 		return dr;
 	}
 
@@ -85,7 +86,7 @@ public class ConsoleIOHandler implements IOHandler {
 					done = false;
 				}
 			}
-			System.out.println("Your roll: "+ roll.toString());
+			System.out.println("Your roll: " + roll.toString());
 		}
 		return roll;
 
@@ -100,8 +101,8 @@ public class ConsoleIOHandler implements IOHandler {
 		else {
 			System.out.println("There's a tie! Congratulations!");
 			System.out.print("The winner are: \n");
-			for(Player p : winner) {
-				System.out.print("\t"+p+ " ");
+			for (Player p : winner) {
+				System.out.print("\t" + p + " ");
 			}
 		}
 	}
@@ -109,6 +110,5 @@ public class ConsoleIOHandler implements IOHandler {
 	public void init() {
 		System.out.println("Have fun and good luck!");
 	}
-
 
 }
