@@ -23,7 +23,16 @@ import pl.edu.agh.to1.dice.logic.Player;
 import pl.edu.agh.to1.dice.logic.ScoreCategory;
 
 public class SwingIOHandler implements IOHandler {
-
+    	
+    	private boolean diceSaved = false;
+	private Object waitForClick = new Object();
+	private JFrame mainFrame = new JFrame();
+	private JTextArea scoreField = new JTextArea();
+	private JPanel dicePanel = new JPanel();
+	private JPanel scoreCatPanel = new JPanel();
+	private JCheckBox diceCheckBoxes[] = new JCheckBox[5];
+	ButtonGroup buttonCategoryGroup = new ButtonGroup();
+    
 	public void showWinner(List<Player> winner, String finalTable) {
 		scoreField.setText(finalTable);
 		mainFrame.repaint();
@@ -90,14 +99,7 @@ public class SwingIOHandler implements IOHandler {
 		});
 	}
 	
-	private boolean diceSaved = false;
-	private Object waitForClick = new Object();
-	private JFrame mainFrame = new JFrame();
-	private JTextArea scoreField = new JTextArea();
-	private JPanel dicePanel = new JPanel();
-	private JPanel scoreCatPanel = new JPanel();
-	private JCheckBox diceCheckBoxes[] = new JCheckBox[5];
-	ButtonGroup buttonCategoryGroup = new ButtonGroup();
+	
 	public void createAndShow() {
 		mainFrame = new JFrame("DICE GAME");
 		mainFrame.setSize(600, 400);
