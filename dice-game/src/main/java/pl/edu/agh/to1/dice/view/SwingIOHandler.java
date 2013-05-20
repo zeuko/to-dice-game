@@ -17,6 +17,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
 import pl.edu.agh.to1.dice.logic.DiceRoll;
@@ -30,13 +31,14 @@ public class SwingIOHandler implements IOHandler {
 	private Object waitForClick = new Object();
 	private JFrame mainFrame = new JFrame();
 	private JTextArea scoreField = new JTextArea();
-	private JTextArea newsField = new JTextArea();
+	private JTextField newsField = new JTextField();
 	private JPanel dicePanel = new JPanel();
 	private JPanel scoreCatPanel = new JPanel();
 	private JCheckBox diceCheckBoxes[] = new JCheckBox[5];
 	ButtonGroup buttonCategoryGroup = new ButtonGroup();
 	private int diceNr;
 	private boolean choosingScoreCategory = false;
+	private String currentPlayer = "";
     
 	public void showWinner(List<Player> winner, String finalTable) {
 		scoreField.setText(finalTable);
@@ -51,14 +53,15 @@ public class SwingIOHandler implements IOHandler {
 	}
 
 	public void showPoints(int i) {
-		// TODO Auto-generated method stub
+		// NOT NEEDED
 
 	}
 
-	public void newTurn(int turnNr, String string) {
+	public void newTurn(int turnNr, String playerName) {
 		for(int i=0; i<diceNr; ++i){
 		    diceCheckBoxes[i].setSelected(false);
 		}
+		currentPlayer = "Player " + playerName;
 
 	}
 
@@ -89,7 +92,7 @@ public class SwingIOHandler implements IOHandler {
 		for(int i=0; i<diceCount; ++i) {
 			diceCheckBoxes[i].setText(""+dr.getDiceValue(i));
 		}
-		newsField.setText("1 rzut");
+		newsField.setText(currentPlayer+ " 1 rzut");
 		System.out.println("Rolled " + dr);
 		mainFrame.repaint();
 		synchronized(waitForClick) {
@@ -123,7 +126,7 @@ public class SwingIOHandler implements IOHandler {
 	    	    for(int i=0; i<5; ++i) {
 	    			diceCheckBoxes[i].setText(""+roll.getDiceValue(i));
 	    	    }
-	    	    String text = j+2 + " rzut";
+	    	    String text = currentPlayer + " " + (j+2) + " rzut";
 	    	    newsField.setText(text);
 	    	    mainFrame.repaint();
 	    	    synchronized(waitForClick) {
@@ -138,7 +141,7 @@ public class SwingIOHandler implements IOHandler {
 	    	    }
 	    	    
 	    	}
-	    	newsField.setText("Wybierz kategorie");
+	    	newsField.setText(currentPlayer + " wybierz kategorie");
 	    	mainFrame.repaint();
 		return roll;
 	}
@@ -205,6 +208,7 @@ public class SwingIOHandler implements IOHandler {
 		}
 		pane.add(dicePanel, BorderLayout.PAGE_END);
 		pane.add(scoreCatPanel, BorderLayout.LINE_END);
+		mainFrame.pack();
 		mainFrame.setVisible(true);
 	}
 }

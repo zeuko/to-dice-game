@@ -34,7 +34,7 @@ public class DiceGame {
 		for (int turnNr = 1; turnNr <= NR_OF_TURNS; turnNr++) {
 			for (Player player : players) {
 				view.showTable(table.toString());
-				view.newTurn(turnNr, player.toString());
+				view.newTurn(turnNr, player.getName());
 				Score currentTurnScore = takeTurn(player);
 				view.showPoints(currentTurnScore.getPoints());
 				table.updateTable(player, currentTurnScore);
