@@ -5,6 +5,7 @@ import java.awt.Container;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
 
@@ -19,6 +20,7 @@ import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 
 import pl.edu.agh.to1.dice.logic.DiceRoll;
+import pl.edu.agh.to1.dice.logic.GameLogicException;
 import pl.edu.agh.to1.dice.logic.Player;
 import pl.edu.agh.to1.dice.logic.ScoreCategory;
 
@@ -28,6 +30,7 @@ public class SwingIOHandler implements IOHandler {
 	private Object waitForClick = new Object();
 	private JFrame mainFrame = new JFrame();
 	private JTextArea scoreField = new JTextArea();
+	private JTextArea newsField = new JTextArea();
 	private JPanel dicePanel = new JPanel();
 	private JPanel scoreCatPanel = new JPanel();
 	private JCheckBox diceCheckBoxes[] = new JCheckBox[5];
@@ -65,8 +68,19 @@ public class SwingIOHandler implements IOHandler {
 		for(int i=0; i<diceCount; ++i) {
 			diceCheckBoxes[i].setText(""+dr.getDiceValue(i));
 		}
+		newsField.setText("Pierwszy rzut");
 		System.out.println("Rolled " + dr);
 		mainFrame.repaint();
+		synchronized(waitForClick) {
+			while(!diceSaved) {
+				try {
+					waitForClick.wait();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+			diceSaved = false;
+		}
 		return dr;
 	}
 
@@ -75,9 +89,20 @@ public class SwingIOHandler implements IOHandler {
 	}
 
 	public DiceRoll rerollDice(DiceRoll roll, int times) {
+	    
+	    	List<Integer> toFreeze = saveToFreeze(5);
+	    	try{
+	    	    roll.freeze(toFreeze);
+	    	}catch( GameLogicException e ){
+	    	    System.out.println("GameLogicException");
+	    	}
+	    	
+	    	roll.roll();
 		for(int i=0; i<5; ++i) {
 			diceCheckBoxes[i].setText(""+roll.getDiceValue(i));
 		}
+		newsField.setText("Nastepny rzut");
+		mainFrame.repaint();
 		synchronized(waitForClick) {
 			while(!diceSaved) {
 				try {
@@ -89,6 +114,15 @@ public class SwingIOHandler implements IOHandler {
 			diceSaved = false;
 		}
 		return roll;
+	}
+	
+	private List<Integer> saveToFreeze(int diceNr){
+	    List<Integer> toFreeze = new LinkedList<Integer>();
+	    for(int i=0; i<diceNr; ++i){
+		if( diceCheckBoxes[i].isSelected() )
+		    toFreeze.add(i+1);
+	    }
+	    return toFreeze;
 	}
 
 	public void init() {
@@ -108,6 +142,8 @@ public class SwingIOHandler implements IOHandler {
 		Container pane = mainFrame.getContentPane();
 		pane.add(scoreField, BorderLayout.LINE_START);
 		scoreField.setEditable(false);
+		pane.add(newsField, BorderLayout.PAGE_START);
+		newsField.setEditable(false);
 		
 		dicePanel.setLayout(new FlowLayout());
 		for(int i=0; i<5; i++) {
@@ -122,6 +158,7 @@ public class SwingIOHandler implements IOHandler {
 				System.out.println("CLICK");
 				synchronized(waitForClick) {
 					diceSaved = true;
+					
 					waitForClick.notifyAll();
 					System.out.println("Clicked! diceSaved=" + diceSaved);
 				}
