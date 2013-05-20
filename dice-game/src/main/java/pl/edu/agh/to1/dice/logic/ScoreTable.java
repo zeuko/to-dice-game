@@ -93,71 +93,75 @@ public class ScoreTable {
 		}
 	}
 	
-	/**
-	 * A bit less mess. 
-	 */
-	public void printTable() {
+	@Override
+	public String toString() {
 		
+		StringBuilder s = new StringBuilder();
 		//
 		String stringFormatFixed = "%15s";
 		String stringFormatAdjustable = "%"+(1+scoresInCategory*4)+"s";
 		String integerFormat = "%"+(1+scoresInCategory*4)+"d";
-		
+		String newline = "\n";
 		// line of proper length, for neat table look
 		String line = "\n---------------";
 		for(int i = 0; i <= scoreTable.size(); i++) { line += "----------";	}
 		for(int i = 0; i <= scoresInCategory; i++) { line += "----";	}
 		
 		// header (category & players)
-		System.out.println(line);
-		System.out.format(stringFormatFixed, "category".toUpperCase());
+		s.append(line);
+		s.append(newline);
+		
+		s.append(String.format(stringFormatFixed, "category".toUpperCase()));
 		for (Player p : scoreTable.keySet()) {
-			System.out.format(stringFormatAdjustable, p.getName());
+			s.append(String.format(stringFormatAdjustable, p.getName()));
 		}
-		System.out.println(line);
+		
+		s.append(line);
+		s.append(newline);
 		
 		// categories & scores
 		for (ScoreCategory c : ScoreCategory.values()) {
-			System.out.format(stringFormatFixed, c.toString().toLowerCase().replaceAll("_", " "));
+			s.append(String.format(stringFormatFixed, c.toString().toLowerCase().replaceAll("_", " ")));
 			for (Player p : scoreTable.keySet()) {
-				System.out.format(stringFormatAdjustable, getPointsOnly(p, c));
+				s.append(String.format(stringFormatAdjustable, getPointsOnly(p, c)));
 			}
 			
 			if (c == ScoreCategory.SIXES) {
-				System.out.println(line);
-				System.out.format(stringFormatFixed, "bonus");
+				s.append(line);
+				s.append(newline);
+				s.append(String.format(stringFormatFixed, "bonus"));
 				for (Player p : scoreTable.keySet()) {
-					System.out.format(integerFormat, getBonusPointsIfDue(p));
+					s.append(String.format(integerFormat, getBonusPointsIfDue(p)));
 				}
-				
-				System.out.println(line);
-				System.out.format(stringFormatFixed, "sum");
+				s.append(line);
+				s.append(newline);
+				s.append(String.format(stringFormatFixed, "sum"));
 				for (Player p : scoreTable.keySet()) {
-					System.out.format(integerFormat,sumUpperTable.get(p) + getBonusPointsIfDue(p));
+					s.append(String.format(integerFormat,sumUpperTable.get(p) + getBonusPointsIfDue(p)));
 				}
-				System.out.print(line);
+				s.append(line);
 			
 			}
 			
-			System.out.println();
+			s.append(newline);
 		}
 		
-		System.out.println(line);
-		System.out.format(stringFormatFixed, "sum");
+		s.append(line);
+		s.append(newline);
+		s.append(String.format(stringFormatFixed, "sum"));
 		for (Player p : scoreTable.keySet()) {
-			System.out.format(integerFormat,sumLowerTable.get(p));
+			s.append(String.format(integerFormat, sumLowerTable.get(p)));
 		}
-		
-		System.out.println(line);
-		System.out.format(stringFormatFixed, "total");
+		s.append(line);
+		s.append(newline);
+		s.append(String.format(stringFormatFixed, "total"));
 		for (Player p : scoreTable.keySet()) {
-			System.out.format(integerFormat, computeTotal(p));
+			s.append(String.format(integerFormat, computeTotal(p)));
 		}
-		
-		System.out.println(line);
-		System.out.println();
+		s.append(line);
+		s.append(newline);
+		return s.toString();
 	}
-
 	/**
 	 * Gets string containing specified player's points in given category,
 	 * formatted in appropriate way (ex. "12  0  3", when there are three scores in single category  allowed)

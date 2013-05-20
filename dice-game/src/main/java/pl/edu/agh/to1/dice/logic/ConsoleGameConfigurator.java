@@ -2,6 +2,9 @@ package pl.edu.agh.to1.dice.logic;
 
 import java.util.Scanner;
 
+import pl.edu.agh.to1.dice.view.ConsoleIOHandler;
+import pl.edu.agh.to1.dice.view.IOHandler;
+
 public class ConsoleGameConfigurator implements GameConfigurator {
 	private GameBuilder gameBuilder = new GameBuilder();
 	private Scanner scanner = new Scanner(System.in);
@@ -10,10 +13,11 @@ public class ConsoleGameConfigurator implements GameConfigurator {
 		DiceGame game = null;
 		printHelp();
 		String cmd;
+		IOHandler ioh = new ConsoleIOHandler();
 		do {
 			cmd = scanner.next();
 			if(cmd.equals("player")) {
-				gameBuilder.addPlayer(scanner.next());
+				gameBuilder.addPlayer(scanner.next(), ioh);
 			} else if(cmd.equals("bot")) {
 				gameBuilder.addBot(scanner.next());
 				
@@ -23,7 +27,7 @@ public class ConsoleGameConfigurator implements GameConfigurator {
 			} else if(cmd.equals("category")) {
 				gameBuilder.setScoresPerCategory(scanner.nextInt());
 			} else if(cmd.equals("start")) {
-				game = gameBuilder.create();
+				game = gameBuilder.create(ioh);
 			} else if(cmd.equals("-h")) {
 				printHelp();
 			} else {

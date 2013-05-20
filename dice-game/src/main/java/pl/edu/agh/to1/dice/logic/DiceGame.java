@@ -2,6 +2,9 @@ package pl.edu.agh.to1.dice.logic;
 
 import java.util.List;
 
+import pl.edu.agh.to1.dice.view.ConsoleIOHandler;
+import pl.edu.agh.to1.dice.view.IOHandler;
+
 
 public class DiceGame {
 
@@ -14,35 +17,30 @@ public class DiceGame {
 	private final List<Player> players;
 	private final ScoreTable table;
 	
-	DiceGame(List<Player> players, int diceCount, int rerollTimes, int scoresPerCategory) {
+	private IOHandler view;
+	
+	DiceGame(List<Player> players, int diceCount, int rerollTimes, int scoresPerCategory, IOHandler ioh) {
 		DICE_COUNT = diceCount;
 		REROLL_TIMES = rerollTimes;
 		SCORES_PER_CATEGORY = scoresPerCategory;
 		NR_OF_TURNS = ScoreCategory.values().length * SCORES_PER_CATEGORY;
 		table = new ScoreTable(players, SCORES_PER_CATEGORY);
 		this.players = players;
+		view = ioh;
 	}
 
 	public void play() {
 		for (int turnNr = 1; turnNr <= NR_OF_TURNS; turnNr++) {
 			for (Player player : players) {
-				table.printTable();
-				System.out.println("TURN " + turnNr + "\n" + player.toString());
+				view.showTable(table.toString());
+				view.newTurn(turnNr, player.toString());
 				Score currentTurnScore = takeTurn(player);
-				System.out.println("Points awarded: "
-						+ currentTurnScore.getPoints());
+				view.showPoints(currentTurnScore.getPoints());
 				table.updateTable(player, currentTurnScore);
 			}
 		}
 
-		System.out.println("------- FINAL RESULTS -------");
-		table.printTable();
-		List<Player> winner = table.getWinner();
-		if (winner.size() == 1)
-			System.out.println("The winner is: " + table.getWinner().get(0)
-					+ ". Congratulations!");
-		else
-			System.out.println("There's a tie! Congratulations!");
+		view.showWinner(table.getWinner(), table.toString());
 	}
 
 	private Score takeTurn(Player player) {

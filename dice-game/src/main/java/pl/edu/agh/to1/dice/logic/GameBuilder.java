@@ -3,6 +3,8 @@ package pl.edu.agh.to1.dice.logic;
 import java.util.LinkedList;
 import java.util.List;
 
+import pl.edu.agh.to1.dice.view.IOHandler;
+
 public class GameBuilder {
 	private List<Player> players = new LinkedList<Player>();
 	private final int DEFAULT_REROLL_TIMES = 2;
@@ -12,8 +14,8 @@ public class GameBuilder {
 	private int diceCount = DEFAULT_DICE_COUNT;
 	private int scoresPerCategory = DEFAULT_SCORES_PER_CATEGORY;
 	
-	public GameBuilder addPlayer(String playerName) {
-		players.add( new HumanPlayer(playerName) );
+	public GameBuilder addPlayer(String playerName, IOHandler ioh) {
+		players.add( new HumanPlayer(playerName, ioh) );
 		return this;
 	}
 	
@@ -55,7 +57,7 @@ public class GameBuilder {
 		return this;
 	}
 	
-	public DiceGame create() {
-		return new DiceGame(players, diceCount, rerollTimes, scoresPerCategory);
+	public DiceGame create(IOHandler ioh) {
+		return new DiceGame(players, diceCount, rerollTimes, scoresPerCategory, ioh);
 	}
 }

@@ -2,7 +2,8 @@ package pl.edu.agh.to1.dice.logic;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
+
+import pl.edu.agh.to1.dice.view.IOHandler;
 
 public class HumanPlayer implements Player {
 
@@ -10,30 +11,15 @@ public class HumanPlayer implements Player {
 
 	private final int playerID = playerIDcounter++;
 	private final String playerName;
-
-	// TODO wrzucic to w IO handler 
-	private Scanner scanner = new Scanner(System.in);
-
-	public HumanPlayer(String playerName) {
+	private final IOHandler ioHandler;
+	
+	public HumanPlayer(String playerName, IOHandler ioh) {
 		this.playerName = playerName;
+		this.ioHandler = ioh;
 	}
 
 	public ScoreCategory chooseScoreCategory() {
-		System.out.println("Categories: 1 2 3 4 5 6 3ki 4ki f ms ds g sz");
-		System.out.print("Your choice:  ");
-		ScoreCategory sc = null;
-		boolean done = false;
-		while (!done) {
-			try {
-				String choice = scanner.nextLine().toLowerCase().trim();
-				sc = ScoreCategory.getResult(choice);
-				done = true;
-			} catch (GameLogicException e) {
-				System.out.println("Unknown option, try again: ");
-				done = false;
-			}
-		}
-		return sc;
+		return ioHandler.getScoreCategory();
 	}
 
 	public String getName() {
@@ -52,49 +38,15 @@ public class HumanPlayer implements Player {
 	}
 
 	public ScoreCategory chooseScoreCategoryAgain() {
-		System.out.println("Invalid choice.");
-		return chooseScoreCategory();
+		return ioHandler.chooseScoreCategory();
 	}
 
 	public DiceRoll rollDice(int diceCount) {
-		DiceRoll dr = new DiceRoll(diceCount);
-		System.out.println("Your roll: "+ dr.toString());
-		return dr;
+		return ioHandler.rollDice(diceCount);
 	}
 
 	public DiceRoll rerollDice(DiceRoll roll, int times) {
-
-		for (int i = 0; i < times; i++) {
-			boolean done = false;
-			System.out.print("Choose dice you want to freeze: ");
-			while (!done) {
-				try {
-					String choice = scanner.nextLine().toLowerCase().trim();
-					if (choice.equals("")) {
-						done = true;
-						roll.roll();
-						break;
-					}
-					List<Integer> c = new ArrayList<Integer>();
-					for (String s : choice.split(",| ")) {
-						c.add(Integer.parseInt(s.trim()));
-					}
-					roll.freeze(c);
-					roll.roll();
-					done = true;
-				} catch (GameLogicException e) {
-					System.out
-							.print("Invalid dice given! Choose again, and check your choice twice before accepting: ");
-					done = false;
-				} catch (NumberFormatException e) {
-					System.out
-							.print("Invalid dice given! Choose again, and check your choice twice before accepting: ");
-					done = false;
-				}
-			}
-			System.out.println("Your roll: "+ roll.toString());
-		}
-		return roll;
+		return ioHandler.rerollDice(roll, times);	
 	}
 
 }
